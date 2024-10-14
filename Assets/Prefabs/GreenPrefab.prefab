@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7013148918658435284}
   - component: {fileID: 8256215590383094796}
   - component: {fileID: 4248620328046367526}
+  - component: {fileID: 224749212612101459}
   m_Layer: 0
   m_Name: GreenPrefab
   m_TagString: Untagged
@@ -110,3 +111,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e408cfa90c624489ac70a716fef78bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isGreen: 1
+--- !u!114 &224749212612101459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8345012378052030579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93a3bcd69349241c3b4e67a333baf5d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 2
+  changeDirectionTime: 2
+  movementAreaMin: {x: -20, y: -15}
+  movementAreaMax: {x: 20, y: 25}
