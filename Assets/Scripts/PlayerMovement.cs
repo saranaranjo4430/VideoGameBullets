@@ -1,11 +1,20 @@
-
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float moveSpeed = 5f;
+    public float moveSpeed = 5f;         // Movement speed of the player
+    public float jumpForce = 5f;         // Force applied to the player when jumping
+    public Transform groundCheck;        // Reference to an empty GameObject near the player's feet for ground detection
+    public LayerMask groundLayer;        // LayerMask to define what is considered ground
+
+    private Rigidbody rb;                // Reference to the Rigidbody component
+    private bool isGrounded;             // Boolean to check if the player is grounded
+
+    void Start()
+    {
+        // Get the Rigidbody component attached to the player
+        rb = GetComponent<Rigidbody>();
+    }
 
     void Update()
     {
@@ -13,13 +22,29 @@ public class PlayerMovement : MonoBehaviour
         float moveX = Input.GetAxis("Horizontal");
         float moveZ = Input.GetAxis("Vertical");
 
-        // Move the player (camera) in the direction of input
+        // Move the player in the direction of input
         Vector3 move = transform.right * moveX + transform.forward * moveZ;
 
-        // Apply the movement, multiplying by moveSpeed and deltaTime for smooth movement
-        transform.Translate(move * moveSpeed * Time.deltaTime, Space.World);
+        // Apply the movement
+        rb.MovePosition(rb.position + move * moveSpeed * Time.deltaTime);
+
+        // Check if the player is on the ground
+        isGrounded = Physics.CheckSphere(groundCheck.position, 0.2f, groundLayer);
+
+        // Jump when the player presses the space bar and is grounded
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
+            Jump();
+        }
+    }
+
+    // Method to apply a jump force
+    void Jump()
+    {
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 }
+
 /*
 using UnityEngine;
 
