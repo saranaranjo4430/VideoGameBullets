@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;  // For restarting the scene
 using UnityEngine.UI;               // For handling the UI components
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,9 +9,10 @@ public class GameManager : MonoBehaviour
 
     public int score = 0;                // Player's score
     public GameObject pauseMenuUI;       // Reference to the pause menu UI
-    public Button pauseButton;           // Reference to the pause button
     public Button resumeButton;          // Reference to the resume button
     public Button restartButton;         // Reference to the restart button
+    public Button quitButton;            // Reference to the quit button
+    public TextMeshProUGUI scoreText;               // Reference to the Text component displaying the score
 
     private bool isPaused = false;       // Keeps track of whether the game is paused
 
@@ -22,10 +24,12 @@ public class GameManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);  // Don't destroy on loading new scenes
         }
-        /*else
+        /*
+        else
         {
             Destroy(gameObject);
-        }*/
+        }
+        */
     }
 
     void Start()
@@ -34,9 +38,12 @@ public class GameManager : MonoBehaviour
         pauseMenuUI.SetActive(false);
 
         // Attach button listeners to their respective functions
-        if (pauseButton != null) pauseButton.onClick.AddListener(PauseGame);
         if (resumeButton != null) resumeButton.onClick.AddListener(ResumeGame);
         if (restartButton != null) restartButton.onClick.AddListener(RestartGame);
+        if (quitButton != null) quitButton.onClick.AddListener(QuitGame);
+
+        // Update the score display at the start
+        UpdateScoreText();
     }
 
     void Update()
@@ -60,6 +67,16 @@ public class GameManager : MonoBehaviour
     {
         score += points;
         Debug.Log("Score: " + score);  // Log the updated score for testing
+        UpdateScoreText();  // Update the score text on screen
+    }
+
+    // Method to update the score display
+    void UpdateScoreText()
+    {
+        if (scoreText != null)
+        {
+            scoreText.text = "Score: " + score.ToString();
+        }
     }
 
     // Method to pause the game
@@ -95,6 +112,22 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Restarting the game");
         Time.timeScale = 1f;  // Ensure game is running at normal speed
+        score = 0;  // Reset the player's score to 0
+        UpdateScoreText();  // Reset the score text
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);  // Reload the current scene
+    }
+
+    // Method to quit the game
+    public void QuitGame()
+    {
+        Debug.Log("Quitting the game...");  // Log message for testing in the Unity Editor
+
+        // If running in the Unity editor, exit play mode (only for testing)
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        // If running a built version of the game, quit the application
+        Application.Quit();
+#endif
     }
 }
